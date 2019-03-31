@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1022, 723)
         self.setWindowIcon(QIcon('./icons/Title.png'))
+        self.setStyleSheet("#MainWindow{border-image:url(./icons/BG.jpg);}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
