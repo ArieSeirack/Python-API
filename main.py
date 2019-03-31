@@ -136,7 +136,8 @@ def main():  # 程序运行的主函数
                 myWin.ShowRate.setText(info[2])
                 myWin.avgPeople.setText(info[3])
                 myWin.ShowPeople.setText(info[4])
-        myWin.MovieName.setText(name)
+                myWin.MovieName.setText(name)
+                break
 
     # 显示主数据栏
     myWin.DateShow.setText(date)
