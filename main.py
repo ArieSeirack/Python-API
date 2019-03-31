@@ -83,24 +83,38 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
 
+class Film():
+    # 初始化类，十个属性分别为排名，名字，上映天数，总票房，当日票房，票房占比，排片场次，排片占比，场均人数，上座率
+    def __init__(self, ra, na, sd, tm, mm, mr, sn, sr, pp, sp):
+        self.rank = ra
+        self.name = na
+        self.showday = sd
+        self.totalmoney = tm
+        self.mainmoney = mm
+        self.moneyrate = mr
+        self.shownumber = sn
+        self.showrate = sr
+        self.people = pp
+        self.showpeople = sp
+
+    def details(self):  # 返回票房占比，排片场次，排片占比，场均人数，上座率
+        yield self.moneyrate, self.shownumber, self.showrate, self.people, self.showpeople
+
+
 def main():  # 程序运行的主函数
-    # 用来暂存影片信息的一些list
-    ranklist = []
+    #用来储存电影list
+    filmlist = []
+    # 用来暂存影片信息的一些list，
     rlist = ''
-    namelist = []
     nlist = ''
-    cursumlist = []
     cslist = ''
-    showdaylist = []
     sdlist = ''
-    totalboxlist = []
     tblist = ''
 
     text = get_to_link()  # 获取数据
     jd = json_text(text)  # json化
     app = QApplication(sys.argv)
     myWin = MyMainWindow()
-
     date, alltime, money = date_time(jd)  # 获取当前的日期和时间以及当日总票房
 
     # 两个自定义的槽函数
@@ -109,17 +123,19 @@ def main():  # 程序运行的主函数
         makeasocket(path)  # 创建文件夹
         save_to_csv(path, date, alltime, money, movie_price(jd))
         QMessageBox.information(myWin, "保存提示", "保存成功！",
-                                        QMessageBox.Yes , QMessageBox.Yes)
+                                        QMessageBox.Yes, QMessageBox.Yes)
 
     def showdetails():  # 按钮点击后显示出所选影片的具体信息
         name = myWin.comboBox_ChooseName.currentText()
-        for n in movie_price(jd):
-            if n[1] == name:
-                myWin.BoxRate.setText(n[5])
-                myWin.ShowNumber.setText(n[6])
-                myWin.ShowRate.setText(n[7])
-                myWin.avgPeople.setText(n[8])
-                myWin.ShowPeople.setText(n[9])
+        for fi in filmlist:  # 此处在电影列表中寻找名字为当前所要查询的电影，然后打印出它的详细信息
+            if fi.name == name:
+                deinf = fi.details()  # 创造一个生成器实例
+                info = next(deinf)  # 执行next方法获取一组返回值
+                myWin.BoxRate.setText(info[0])
+                myWin.ShowNumber.setText(info[1])
+                myWin.ShowRate.setText(info[2])
+                myWin.avgPeople.setText(info[3])
+                myWin.ShowPeople.setText(info[4])
         myWin.MovieName.setText(name)
 
     # 显示主数据栏
@@ -132,33 +148,21 @@ def main():  # 程序运行的主函数
     myWin.FileSave.clicked.connect(savetofile)
 
     for movie in movie_price(jd):  # 从json化的数据中获取各个影片的主要信息
-        myWin.comboBox_ChooseName.addItem(movie[1])
-        ranklist.append(str(movie[0]))
-        namelist.append(movie[1])
-        showdaylist.append(movie[2])
-        totalboxlist.append(movie[3])
-        cursumlist.append(movie[4])
+        # 赋予certainmovie实例各个属性
+        cmovie = Film(
+            movie[0], movie[1], movie[2], movie[3], movie[4],
+            movie[5], movie[6], movie[7], movie[8], movie[9])
 
-    # 分别获取各影片的各个信息
-    for rank in ranklist:
-        rlist += rank
-        rlist += '\n'
+        filmlist.append(cmovie)
+        myWin.comboBox_ChooseName.addItem(cmovie.name)
 
-    for name in namelist:
-        nlist += name
-        nlist += '\n'
-
-    for sd in showdaylist:
-        sdlist += sd
-        sdlist += '\n'
-
-    for cursum in cursumlist:
-        cslist += cursum
-        cslist += '万\n'
-
-    for tb in totalboxlist:
-        tblist += tb
-        tblist += '\n'
+    # 分别获取各影片的各个信息，储存在各list中
+    for fi in filmlist:
+        rlist += str(fi.rank)+'\n'
+        nlist += fi.name+'\n'
+        sdlist += fi.showday+'\n'
+        cslist += fi.mainmoney+'万\n'
+        tblist += fi.totalmoney+'\n'
 
     # 显示各电影的主要信息
     myWin.RankList.setText(rlist)
