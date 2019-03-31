@@ -6,13 +6,15 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1008, 737)
+        MainWindow.resize(1022, 723)
         self.setWindowIcon(QIcon('./icons/Title.png'))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -199,27 +201,35 @@ class Ui_MainWindow(object):
         spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.formLayout.setItem(9, QtWidgets.QFormLayout.FieldRole, spacerItem4)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(730, 620, 267, 80))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(720, 570, 271, 102))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.label_2 = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label_2.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_3.addWidget(self.label_2)
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.FileSave = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.FileSave.setObjectName("FileSave")
+        self.verticalLayout_8.addWidget(self.FileSave)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_8.addItem(spacerItem5)
         self.UseTips = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.UseTips.setObjectName("UseTips")
-        self.horizontalLayout_3.addWidget(self.UseTips)
         self.UseTips.clicked.connect(self.msg)
+        self.verticalLayout_8.addWidget(self.UseTips)
+        self.horizontalLayout_3.addLayout(self.verticalLayout_8)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1008, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1022, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -245,9 +255,11 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "场均人次："))
         self.label_7.setText(_translate("MainWindow", "上座率："))
         self.label_2.setText(_translate("MainWindow", "——基于猫眼电影专业版"))
+        self.FileSave.setText(_translate("MainWindow", "保存到文件"))
         self.UseTips.setText(_translate("MainWindow", "使用指南"))
 
     def msg(self):
-        reply = QMessageBox.information(self, "使用提示", "通过下拉列表选择影片，点击确定即可查看详细信息",
-                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-        print(reply)
+        QMessageBox.information(self, "使用提示", "通过下拉列表选择影片，点击确定即可查看详细信息。\n"
+                                                      "点击“保存到文件”，可以在路径为“D:/数据/猫眼电影专业版数据/”创建一个文件,"
+                                                      "用来保存当前的票房数据。",
+                                        QMessageBox.Yes, QMessageBox.Yes)
